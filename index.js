@@ -11,6 +11,16 @@ const player = WaveSurfer.create({
   container: '[data-waveform]'
 })
 
+const disableAndHide = (element) => {
+  element.disabled = true
+  element.style.display = 'none'
+}
+
+const enableAndShow = (element) => {
+  element.disabled = false
+  element.style.display = 'inline-block'
+}
+
 navigator.mediaDevices.getUserMedia({audio: true})
   .then((stream) => {
     const mimeType = 'audio/webm'
@@ -19,50 +29,50 @@ navigator.mediaDevices.getUserMedia({audio: true})
     recorder.ondataavailable = (e) => chunks.push(e.data)
     recorder.onstart = () => {
       player.empty()
-      recorderRecordElm.disabled = true
-      recorderPauseElm.disabled = false
-      recorderResumeElm.disabled = true
-      recorderStopElm.disabled = false
-      playerPlayElm.disabled = true
-      playerPauseElm.disabled = true
-      playerStopElm.disabled = true
+      disableAndHide(recorderRecordElm)
+      enableAndShow(recorderPauseElm)
+      disableAndHide(recorderResumeElm)
+      enableAndShow(recorderStopElm)
+      disableAndHide(playerPlayElm)
+      disableAndHide(playerPauseElm)
+      disableAndHide(playerStopElm)
     }
     recorder.onpause = () => {
-      recorderRecordElm.disabled = true
-      recorderPauseElm.disabled = true
-      recorderResumeElm.disabled = false
-      recorderStopElm.disabled = false
-      playerPlayElm.disabled = true
-      playerPauseElm.disabled = true
-      playerStopElm.disabled = true
+      disableAndHide(recorderRecordElm)
+      disableAndHide(recorderPauseElm)
+      enableAndShow(recorderResumeElm)
+      enableAndShow(recorderStopElm)
+      disableAndHide(playerPlayElm)
+      disableAndHide(playerPauseElm)
+      disableAndHide(playerStopElm)
     }
     recorder.onstop = () => {
-      recorderRecordElm.disabled = false
-      recorderPauseElm.disabled = true
-      recorderResumeElm.disabled = false
-      recorderStopElm.disabled = true
-      playerPlayElm.disabled = false
-      playerPauseElm.disabled = true
-      playerStopElm.disabled = true
+      enableAndShow(recorderRecordElm)
+      disableAndHide(recorderPauseElm)
+      enableAndShow(recorderResumeElm)
+      disableAndHide(recorderStopElm)
+      enableAndShow(playerPlayElm)
+      disableAndHide(playerPauseElm)
+      disableAndHide(playerStopElm)
       player.load(window.URL.createObjectURL(new window.Blob(chunks, {type: mimeType})))
     }
     player.on('play', () => {
-      recorderRecordElm.disabled = true
-      recorderPauseElm.disabled = true
-      recorderResumeElm.disabled = true
-      recorderStopElm.disabled = true
-      playerPlayElm.disabled = true
-      playerPauseElm.disabled = false
-      playerStopElm.disabled = false
+      disableAndHide(recorderRecordElm)
+      disableAndHide(recorderPauseElm)
+      disableAndHide(recorderResumeElm)
+      disableAndHide(recorderStopElm)
+      disableAndHide(playerPlayElm)
+      enableAndShow(playerPauseElm)
+      enableAndShow(playerStopElm)
     })
     player.on('pause', () => {
-      recorderRecordElm.disabled = false
-      recorderPauseElm.disabled = true
-      recorderResumeElm.disabled = true
-      recorderStopElm.disabled = true
-      playerPlayElm.disabled = false
-      playerPauseElm.disabled = true
-      playerStopElm.disabled = false
+      enableAndShow(recorderRecordElm)
+      disableAndHide(recorderPauseElm)
+      disableAndHide(recorderResumeElm)
+      disableAndHide(recorderStopElm)
+      enableAndShow(playerPlayElm)
+      disableAndHide(playerPauseElm)
+      enableAndShow(playerStopElm)
     })
     recorderRecordElm.addEventListener('click', () => { recorder.start() })
     recorderPauseElm.addEventListener('click', () => { recorder.pause() })
@@ -72,6 +82,6 @@ navigator.mediaDevices.getUserMedia({audio: true})
     playerPauseElm.addEventListener('click', () => { player.pause() })
     playerStopElm.addEventListener('click', () => {
       player.stop()
-      playerStopElm.disabled = true
+      disableAndHide(playerStopElm)
     })
   })
