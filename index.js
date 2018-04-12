@@ -73,7 +73,11 @@ navigator.mediaDevices.getUserMedia({audio: true})
       disableAndHide(recorderStopElm)
       enableAndShow(playerPlayElm)
       disableAndHide(playerPauseElm)
-      enableAndShow(playerStopElm)
+      if (player.getCurrentTime() === player.getDuration()) {
+        disableAndHide(playerStopElm)
+      } else {
+        enableAndShow(playerStopElm)
+      }
     })
     recorderRecordElm.addEventListener('click', () => { recorder.start() })
     recorderPauseElm.addEventListener('click', () => { recorder.pause() })
