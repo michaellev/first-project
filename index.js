@@ -55,6 +55,7 @@ navigator.mediaDevices.getUserMedia({audio: true})
       disableAndHide(playerPauseElm)
       disableAndHide(playerStopElm)
       player.load(window.URL.createObjectURL(new window.Blob(chunks, {type: mimeType})))
+      chunks.length = 0
     }
     player.on('play', () => {
       disableAndHide(recorderRecordElm)
