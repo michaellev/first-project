@@ -49,7 +49,7 @@ navigator.mediaDevices.getUserMedia({audio: true})
     recorder.onstop = () => {
       enableAndShow(recorderRecordElm)
       disableAndHide(recorderPauseElm)
-      enableAndShow(recorderResumeElm)
+      disableAndHide(recorderResumeElm)
       disableAndHide(recorderStopElm)
       enableAndShow(playerPlayElm)
       disableAndHide(playerPauseElm)
