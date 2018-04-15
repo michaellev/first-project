@@ -7,6 +7,11 @@ const recorderStopElm = document.querySelector('[data-recorder-stop]')
 const playerPlayElm = document.querySelector('[data-player-play]')
 const playerPauseElm = document.querySelector('[data-player-pause]')
 const playerStopElm = document.querySelector('[data-player-stop]')
+
+const downloadElm = window.document.createElement('a')
+downloadElm.download = 'recording.webm'
+downloadElm.textContent = 'Download'
+
 const player = WaveSurfer.create({
   container: '[data-waveform]'
 })
@@ -20,6 +25,9 @@ const enableAndShow = (element) => {
   element.disabled = false
   element.style.display = 'inline-block'
 }
+
+const showSaveLink = () => { document.body.appendChild(downloadElm) }
+const hideSaveLink = () => { downloadElm && downloadElm.parentNode && downloadElm.remove() }
 
 navigator.mediaDevices.getUserMedia({audio: true})
   .then((stream) => {
@@ -36,6 +44,7 @@ navigator.mediaDevices.getUserMedia({audio: true})
       disableAndHide(playerPlayElm)
       disableAndHide(playerPauseElm)
       disableAndHide(playerStopElm)
+      hideSaveLink()
     }
     recorder.onpause = () => {
       disableAndHide(recorderRecordElm)
@@ -45,6 +54,7 @@ navigator.mediaDevices.getUserMedia({audio: true})
       disableAndHide(playerPlayElm)
       disableAndHide(playerPauseElm)
       disableAndHide(playerStopElm)
+      hideSaveLink()
     }
     recorder.onstop = () => {
       enableAndShow(recorderRecordElm)
@@ -54,8 +64,11 @@ navigator.mediaDevices.getUserMedia({audio: true})
       enableAndShow(playerPlayElm)
       disableAndHide(playerPauseElm)
       disableAndHide(playerStopElm)
-      player.load(window.URL.createObjectURL(new window.Blob(chunks, {type: mimeType})))
+      let url = window.URL.createObjectURL(new window.Blob(chunks, {type: mimeType}))
+      player.load(url)
       chunks.length = 0
+      downloadElm.href = url
+      showSaveLink()
     }
     player.on('play', () => {
       disableAndHide(recorderRecordElm)
@@ -78,6 +91,8 @@ navigator.mediaDevices.getUserMedia({audio: true})
       } else {
         enableAndShow(playerStopElm)
       }
+      disableAndHide(playerStopElm)
+      showSaveLink()
     })
     recorderRecordElm.addEventListener('click', () => { recorder.start() })
     recorderPauseElm.addEventListener('click', () => { recorder.pause() })
@@ -88,5 +103,6 @@ navigator.mediaDevices.getUserMedia({audio: true})
     playerStopElm.addEventListener('click', () => {
       player.stop()
       disableAndHide(playerStopElm)
+      showSaveLink()
     })
   })
