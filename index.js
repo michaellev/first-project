@@ -26,8 +26,8 @@ const enableAndShow = (element) => {
   element.style.display = 'inline-block'
 }
 
-const showSaveLink = () => { document.body.appendChild(downloadElm) }
-const hideSaveLink = () => { downloadElm && downloadElm.parentNode && downloadElm.remove() }
+const showDownloadElm = () => { document.body.appendChild(downloadElm) }
+const hideDownloadElm = () => { downloadElm && downloadElm.parentNode && downloadElm.remove() }
 
 navigator.mediaDevices.getUserMedia({audio: true})
   .then((stream) => {
@@ -44,7 +44,7 @@ navigator.mediaDevices.getUserMedia({audio: true})
       disableAndHide(playerPlayElm)
       disableAndHide(playerPauseElm)
       disableAndHide(playerStopElm)
-      hideSaveLink()
+      hideDownloadElm()
     }
     recorder.onpause = () => {
       disableAndHide(recorderRecordElm)
@@ -54,7 +54,7 @@ navigator.mediaDevices.getUserMedia({audio: true})
       disableAndHide(playerPlayElm)
       disableAndHide(playerPauseElm)
       disableAndHide(playerStopElm)
-      hideSaveLink()
+      hideDownloadElm()
     }
     recorder.onstop = () => {
       enableAndShow(recorderRecordElm)
@@ -68,7 +68,7 @@ navigator.mediaDevices.getUserMedia({audio: true})
       player.load(url)
       chunks.length = 0
       downloadElm.href = url
-      showSaveLink()
+      showDownloadElm()
     }
     player.on('play', () => {
       disableAndHide(recorderRecordElm)
@@ -92,7 +92,7 @@ navigator.mediaDevices.getUserMedia({audio: true})
         enableAndShow(playerStopElm)
       }
       disableAndHide(playerStopElm)
-      showSaveLink()
+      showDownloadElm()
     })
     recorderRecordElm.addEventListener('click', () => { recorder.start() })
     recorderPauseElm.addEventListener('click', () => { recorder.pause() })
@@ -103,6 +103,6 @@ navigator.mediaDevices.getUserMedia({audio: true})
     playerStopElm.addEventListener('click', () => {
       player.stop()
       disableAndHide(playerStopElm)
-      showSaveLink()
+      showDownloadElm()
     })
   })
