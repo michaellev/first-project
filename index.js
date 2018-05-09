@@ -91,7 +91,6 @@ navigator.mediaDevices.getUserMedia({audio: true})
       } else {
         enableAndShow(playerStopElm)
       }
-      showDownloadElm()
     })
     recorderRecordElm.addEventListener('click', () => { recorder.start() })
     recorderPauseElm.addEventListener('click', () => { recorder.pause() })
