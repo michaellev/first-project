@@ -11,10 +11,11 @@ const playerStopElm = document.querySelector('[data-player-stop]')
 const downloadElm = window.document.createElement('a')
 downloadElm.download = 'recording.webm'
 downloadElm.textContent = 'Download'
-
 const player = WaveSurfer.create({
   container: '[data-waveform]'
 })
+
+window.__player = player
 
 const disableAndHide = (element) => {
   element.disabled = true
@@ -31,8 +32,10 @@ const hideDownloadElm = () => { downloadElm && downloadElm.parentNode && downloa
 
 navigator.mediaDevices.getUserMedia({audio: true})
   .then((stream) => {
+    enableAndShow(recorderRecordElm)
     const mimeType = 'audio/webm'
     const recorder = new window.MediaRecorder(stream, {mimeType})
+    window.__recorder = recorder
     const chunks = []
     recorder.ondataavailable = (e) => chunks.push(e.data)
     recorder.onstart = () => {
